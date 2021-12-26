@@ -22,13 +22,13 @@
             },
             "search": {},
             "sharing": {
-                "all": ["facebook", "google", "twitter", "weibo", "instapaper"],
-                "facebook": true,
+                "all": ["facebook", "google", "twitter", "weibo", "instapaper", "vk"],
+                "facebook": false,
                 "google": false,
                 "instapaper": false,
-                "twitter": true,
+                "twitter": false,
                 "vk": false,
-                "weibo": false
+                "weibo": true
             },
             "theme-default": {
                 "showLevel": false,
