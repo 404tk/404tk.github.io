@@ -6,7 +6,7 @@ category: golang
 layout: post
 ---
 
-直接贴代码：  
+Server端代码：  
 ```go
 package main
 
@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -23,7 +24,10 @@ type Server struct {
 	Chaters map[string]net.Conn
 }
 
-var port string
+var (
+	port   string
+	secret = "password"
+)
 
 func init() {
 	flag.StringVar(&port, "p", "8080", "Listen port")
@@ -47,7 +51,7 @@ func main() {
 			break
 		}
 
-		go chaters.registry(c)
+		c.Write([]byte("Input your code: "))
 		go chaters.handleConn(c)
 	}
 }
@@ -55,32 +59,49 @@ func main() {
 func (s *Server) handleConn(conn net.Conn) {
 	defer conn.Close()
 	r := bufio.NewReader(conn)
+	addr := conn.RemoteAddr().String()
 	for {
 		time.Sleep(100 * time.Microsecond)
 		data, err := r.ReadString('\n')
 		if err != nil {
-			// 退出会话
-			delete(s.Chaters, conn.RemoteAddr().String())
-			msg := fmt.Sprintf("【%s】退出房间\n", conn.RemoteAddr().String())
-			s.sendMsg(conn.RemoteAddr().String(), msg)
-			log.Print(msg)
+			s.quit(conn, addr)
 			break
 		}
-		msg := fmt.Sprintf("【%s】%s\n", conn.RemoteAddr().String(), data)
-		s.sendMsg(conn.RemoteAddr().String(), msg)
-		log.Print(msg)
+		data = strings.Trim(data, "\n")
+		if data == "exit" || data == "quit" {
+			s.quit(conn, addr)
+			break
+		}
+		var msg string
+		if _, ok := s.Chaters[addr]; !ok {
+			if data == secret {
+				s.register(conn, addr)
+				msg = fmt.Sprintf("【%s】加入房间", addr)
+			} else {
+				break
+			}
+		} else if len(data) > 0 {
+			msg = fmt.Sprintf("【%s】%s", addr, data)
+		}
+		if len(msg) > 0 {
+			s.sendMsg(addr, msg+"\n")
+			log.Print(msg)
+		}
+		conn.Write([]byte("[Enter]> "))
 	}
 }
 
 // 注册会话
-func (s *Server) registry(conn net.Conn) {
-	key := conn.RemoteAddr().String()
-	if _, ok := s.Chaters[key]; !ok {
-		s.Chaters[key] = conn
-		msg := fmt.Sprintf("【%s】加入房间\n", key)
-		s.sendMsg(key, msg)
-		log.Print(msg)
-	}
+func (s *Server) register(conn net.Conn, addr string) {
+	s.Chaters[addr] = conn
+}
+
+// 退出会话
+func (s *Server) quit(conn net.Conn, addr string) {
+	delete(s.Chaters, addr)
+	msg := fmt.Sprintf("【%s】退出房间", addr)
+	s.sendMsg(addr, msg+"\n")
+	log.Print(msg)
 }
 
 // 广播消息
