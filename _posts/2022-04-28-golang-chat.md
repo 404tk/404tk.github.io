@@ -14,6 +14,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"strings"
@@ -64,23 +65,27 @@ func (s *Server) handleConn(conn net.Conn) {
 		time.Sleep(100 * time.Microsecond)
 		data, err := r.ReadString('\n')
 		if err != nil {
-			s.quit(conn, addr)
+			if err == io.EOF {
+				s.quit(conn, addr)
+			}
 			break
 		}
 		data = strings.Trim(data, "\n")
-		if data == "exit" || data == "quit" {
-			s.quit(conn, addr)
-			break
-		}
 		var msg string
 		if _, ok := s.Chaters[addr]; !ok {
 			if data == secret {
 				s.register(conn, addr)
-				msg = fmt.Sprintf("【%s】加入房间", addr)
+				banner := fmt.Sprintf("Welcome!\nCurrent online: %d\n", len(s.Chaters))
+				conn.Write([]byte(banner))
+				msg += fmt.Sprintf("【%s】加入房间", addr)
 			} else {
 				break
 			}
 		} else if len(data) > 0 {
+			if data == "exit" || data == "quit" {
+				s.quit(conn, addr)
+				break
+			}
 			msg = fmt.Sprintf("【%s】%s", addr, data)
 		}
 		if len(msg) > 0 {
