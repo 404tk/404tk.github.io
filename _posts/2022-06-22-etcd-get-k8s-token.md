@@ -1,7 +1,7 @@
 ---
 title: etcd接管K8s api-server
 author: 404tk
-date: 2022-04-28
+date: 2022-06-22
 category: Kubernetes
 layout: post
 ---
