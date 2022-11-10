@@ -8,23 +8,41 @@ layout: post
 
 关于credcollect
 -------------
-自动凭证收集和存储CredCollect。
-仅提取明文密码（不包括 cookie 和令牌）。
 
-已支持的模块
+当我们控下一台或多台主机时，往往需要做的事情包括`尽可能搜集主机上留存的各类敏感信息`，而明文凭据则是最常见、也最易深入利用的信息。  
+
+浏览器记录
 -------------
-|				| Linux |Windows| MacOS	|
-| :-----------: | :--:	| :--:	| :--:	|
-|	Browser		|	√ 	|	√	|	√	|
-|	FileZilla	|	√	|	√	|	√	|
-|	Tomcat		|	√   |	√	|	√	|
-|	Navicat		|	    |	√	|		|
-|	XShell/Xftp	|	    |	√	|		|
-|	WinScp		|		|	√	|		|
-|	Seeyon OA	|	√	|		|		|
-|	Docker Hub	|	√	|		|		|
-|	ActiveMQ	|	√	|		|		|
-|	CredManager	|		|	√	|		|
+
++ Chrome
++ Firefox
++ Opera
++ Microsoft Edge
++ QQ浏览器
++ 360极速浏览器
++ Brave
++ Vivaldi
+
+运维类客户端
+-------------
+
++ XShell
++ Xftp
++ FileZilla
++ WinScp
++ Navicat
++ Docker
+
+已部署应用配置
+-------------
+
++ Tomcat
++ ActiveMQ
+
+凭据管理器
+-------------
+
++ Windows Credential Manager
 
 链接地址
 -------------
