@@ -1,0 +1,7 @@
+#js_single_page_container{
+    display: none;
+}
+
+.login_page_standalone:before{
+    content:"hacked by she1d0n";
+}

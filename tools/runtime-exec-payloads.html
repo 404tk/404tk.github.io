@@ -55,10 +55,10 @@ pre, code {
    <div id="container"> 
     <div class="entry"> 
      <article> 
-      <p>有时命令执行Payload<code>Runtime.getRuntime().exec()</code>会失败。 当通过Webshell、反序列化漏洞或其他方式执行命令时，可能会发生这种情况。</p> 
+      <p>有时命令执行Payload<code>Runtime.getRuntime().exec()</code>会失败。 当通过Webshell、反序列化漏洞或其他方式执行命令时，会出现这种情况。</p> 
       <p>这是因为重定向和管道字符的使用方式在正在启动的进程的上下文中没有意义。 例如 <code>ls &gt; dir_listing</code>，在shell中执行应该将当前目录的列表输出到名为<code>dir_listing</code>的文件中。但是在 <code>exec()</code> 函数的上下文中，该命令将被解释为列举 <code>&gt;</code> 和 <code>dir_listing</code> 目录。</p> 
       <p>某些时候，包含空格的参数会被 StringTokenizer 类破坏。该类将命令字符串按空格拆分。类似的例子 <code>ls &quot;My Directory&quot;</code> 会被解释为 <code>ls '&quot;My' 'Directory&quot;'</code>。</p> 
-      <p>在Base64编码的帮助下, 下面的转换器可以帮助减少这些问题。它可以通过调用Bash或PowerShell再次使管道和重定向变得更好，并且还确保命令参数中没有空格。</p> 
+      <p>通过下方的转换器，在Base64编码的帮助下可以有效减少这类问题。它可以通过调用Bash或PowerShell再次使管道和重定向变得更好，并且还确保命令参数中没有空格。</p> 
       <p>Input type: <input type="radio" id="bash" name="option" value="bash" onclick="processInput();" checked="" /><label for="bash">Bash</label> <input type="radio" id="powershell" name="option" value="powershell" onclick="processInput();" /><label for="powershell">PowerShell</label> <input type="radio" id="python" name="option" value="python" onclick="processInput();" /><label for="python">Python</label> <input type="radio" id="perl" name="option" value="perl" onclick="processInput();" /><label for="perl">Perl</label></p> 
       <p><textarea rows="10" style="width: 100%; box-sizing: border-box;" id="input" placeholder="Type input here..."></textarea> <textarea rows="5" style="width: 100%; box-sizing: border-box;" id="output" onclick="this.focus(); this.select();" readonly=""></textarea></p> 
       <script>
@@ -107,5 +107,8 @@ pre, code {
   </a>
 
   </div>  
+  <footer>
+    &copy; @Jackson_T
+  </footer>
  </body>
 </html>
